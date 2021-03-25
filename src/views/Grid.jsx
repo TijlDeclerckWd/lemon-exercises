@@ -2,36 +2,24 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
+import { Square, ColorPicker } from '../components';
+
 const Container = styled.div`
   box-sizing: border-box;
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   max-height: 100vh;
   overflow: hidden;
 `;
 
-const SquareContainer = styled.div`
-  border: 1px solid #888;
-  width: 1vw;
-  height: 1vw;
-  background-color: ${({ color, active }) => active ? 'pink' : '#fff'};
-`;
-
-const Square = () => {
-    const [active, setActive] = useState(false);
-
-    const handleClick = () => {
-        setActive(() => !active);
-    }
-
-    return (
-        <SquareContainer onMouseDown={() => console.log('mousedown')} onDragLeave={() => console.log("we're leaving")} onDragOver={() => console.log('onDragOver')} onClick={handleClick} active={active}/>
-    )
-}
-
-
 const Grid = (props) => {
-    const [dragging, setDragging] = useState(false);
+    const [colorPicker, setColorPicker] = useState({
+      color: "pink",
+      show: false,
+      x: 0,
+      y: 0
+    });
   const [dimensions, setDimensions] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -43,7 +31,14 @@ const Grid = (props) => {
     calculateTotalSquares();
     window.addEventListener("resize", calculateTotalSquares);
 
-    return () => window.removeEventListener("resize", calculateTotalSquares);
+    window.oncontextmenu = (e) => {
+      setColorPicker({ show: true, x: e.x, y: e.y });
+      return false;
+    }
+
+    return () => {
+      window.removeEventListener("resize", calculateTotalSquares);
+    }
   }, []);
 
   const calculateTotalSquares = () => {
@@ -62,11 +57,21 @@ const Grid = (props) => {
     }
   };
 
+  const handleMouseOut = () => {
+    setColorPicker({ show: false, x: 0, y:0 });
+  }
+
+  const selectMainColor = (color) => {
+    setColorPicker({ show: false, color, x: 0, y: 0 });
+  }
+
+
   return (
     <Container>
       {[...Array(dimensions.totalSquares)].map((item, i) => (
-        <Square key={i} />
+        <Square mainColor={colorPicker.color} key={i} />
       ))}
+      {colorPicker.show && <ColorPicker selectMainColor={selectMainColor} onMouseOut={handleMouseOut} x={colorPicker.x} y={colorPicker.y} />}
     </Container>
   );
 };
