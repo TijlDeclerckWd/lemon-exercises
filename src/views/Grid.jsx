@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
-import { Square, ColorPicker } from '../components';
+import { Square, ColorPicker } from "../components";
 
 const Container = styled.div`
   box-sizing: border-box;
@@ -14,12 +14,14 @@ const Container = styled.div`
 `;
 
 const Grid = (props) => {
-    const [colorPicker, setColorPicker] = useState({
-      color: "pink",
-      show: false,
-      x: 0,
-      y: 0
-    });
+  console.log('render');
+  const [dragging, setDragging] = useState(false);
+  const [colorPicker, setColorPicker] = useState({
+    color: "pink",
+    show: false,
+    x: 0,
+    y: 0,
+  });
   const [dimensions, setDimensions] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -32,13 +34,14 @@ const Grid = (props) => {
     window.addEventListener("resize", calculateTotalSquares);
 
     window.oncontextmenu = (e) => {
+      console.log("entered context menu");
       setColorPicker({ show: true, x: e.x, y: e.y });
       return false;
-    }
+    };
 
     return () => {
       window.removeEventListener("resize", calculateTotalSquares);
-    }
+    };
   }, []);
 
   const calculateTotalSquares = () => {
@@ -57,21 +60,35 @@ const Grid = (props) => {
     }
   };
 
-  const handleMouseOut = () => {
-    setColorPicker({ show: false, x: 0, y:0 });
-  }
+  const handleDragging = (e, dragging) => {
+    // if we pressed the left mouse button
+    if (e.button === 0) {
+      setDragging(dragging);
+    }
+  };
 
-  const selectMainColor = (color) => {
-    setColorPicker({ show: false, color, x: 0, y: 0 });
-  }
-
+  const squaresCollection = useMemo(() => {
+    return [...Array(dimensions.totalSquares)];
+  }, [dimensions.totalSquares]);
 
   return (
-    <Container>
-      {[...Array(dimensions.totalSquares)].map((item, i) => (
-        <Square mainColor={colorPicker.color} key={i} />
+    <Container
+      onDragStart={(e) => e.preventDefault()}
+      onMouseDown={(e) => handleDragging(e, true)}
+      onMouseUp={(e) => handleDragging(e, false)}
+    >
+      {squaresCollection.map((item, i) => (
+        <Square dragging={dragging} mainColor={colorPicker.color} key={i} />
       ))}
-      {colorPicker.show && <ColorPicker selectMainColor={selectMainColor} onMouseOut={handleMouseOut} x={colorPicker.x} y={colorPicker.y} />}
+      {colorPicker.show && (
+        <ColorPicker
+          selectMainColor={(color) =>
+            setColorPicker({ show: false, color, x: 0, y: 0 })
+          }
+          x={colorPicker.x}
+          y={colorPicker.y}
+        />
+      )}
     </Container>
   );
 };
