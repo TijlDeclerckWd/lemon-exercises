@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { Grid, Home } from './views';
+import { Grid, Home, MusicSearcher, Song } from './views';
 import browserHistory from "./services/browserHistory";
 
 function App() {
@@ -9,6 +9,8 @@ function App() {
         <Switch>
           <Route path="/" exact component={Home} />
           <Route path="/grid" exact component={Grid} />
+          <Route path="/music-searcher" exact component={MusicSearcher} />
+          <Route path="/music-searcher/song/:trackID" exact component={Song} />
         </Switch>
       </BrowserRouter>
     </div>
