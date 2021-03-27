@@ -9,8 +9,7 @@ function App() {
         <Switch>
           <Route path="/" exact component={Home} />
           <Route path="/grid" exact component={Grid} />
-          <Route path="/music-searcher" exact component={MusicSearcher} />
-          <Route path="/music-searcher/song/:trackID" exact component={Song} />
+          <Route path="/music-searcher" component={MusicSearcher} />
         </Switch>
       </BrowserRouter>
     </div>

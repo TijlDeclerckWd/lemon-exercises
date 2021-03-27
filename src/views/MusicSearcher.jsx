@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { Route } from "react-router-dom";
 
-import useAsync from "../services/hooks/useAsync";
-import { ListItem } from "../components";
+import useAsync from "services/hooks/useAsync";
+import { Search, Song } from "components";
 
 const Container = styled.div``;
-
-const List = styled.ul`
-`;
 
 const MusicSearcher = () => {
   const [searchResults, setSearchResults] = useState([]);
@@ -22,10 +20,11 @@ const MusicSearcher = () => {
       url.searchParams.append(key, params[key])
     );
     return fetch(url);
-  }
+  };
+
   
   const { execute, value } = useAsync(fetchSongs, false);
-
+  
   useEffect(() => {
     if (searchText) {
       execute();
@@ -41,12 +40,22 @@ const MusicSearcher = () => {
   return (
     <Container>
       <h1>iTunes Music Searcher</h1>
-      <input type="text" onChange={(e) => setSearchText(e.target.value)} />
-      <List>
-        {searchResults.map((song) => (
-          <ListItem song={song} />
-        ))}
-      </List>
+      <Route
+        exact
+        path={`/music-searcher/search`}
+        render={() => (
+          <Search
+            searchText={searchText}
+            searchResults={searchResults}
+            onChange={(value) => setSearchText(value)}
+          />
+        )}
+      />
+      <Route
+        exact
+        path={`/music-searcher/song/:trackID`}
+        component={Song}
+      />
     </Container>
   );
 };

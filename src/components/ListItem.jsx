@@ -55,7 +55,7 @@ const ListItem = ({ song }) => {
       <PlayContainer>
         <Link
           to={{
-            pathname: `music-searcher/song/${song.trackId}`,
+            pathname: `/music-searcher/song/${song.trackId}`,
             song,
           }}
         >
