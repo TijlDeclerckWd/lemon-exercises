@@ -6,12 +6,12 @@ const ColorPickerContainer = styled.div`
     position: absolute;
     left: ${({ left }) => left}px;
     top: ${({ top }) => top}px;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 0);
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
-    width: 26vw;
-    height: 5vw;
+    width: 20vw;
+    height: 4vw;
     border-radius: 10px;
     z-index: 5;
     background-color: #fff;
@@ -20,8 +20,8 @@ const ColorPickerContainer = styled.div`
 `
 
 const Color = styled.div`
-    width: 4vw;
-    height: 4vw;
+    width: 3vw;
+    height: 3vw;
     background-color: ${({ color }) => color};
 `
 

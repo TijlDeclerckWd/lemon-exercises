@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { Route } from "react-router-dom";
 
 import useAsync from "services/hooks/useAsync";
 import { Search, Song } from "components";
 
-const Container = styled.div``;
+const Container = styled.div`
+  padding-left: 2vw;
+`;
 
 const MusicSearcher = () => {
   const [searchResults, setSearchResults] = useState([]);
-  const [searchText, setSearchText] = useState([]);
+  const [searchText, setSearchText] = useState('');
 
   const fetchSongs = () => {
     const url = new URL("https://itunes.apple.com/search");
@@ -22,8 +23,7 @@ const MusicSearcher = () => {
     return fetch(url);
   };
 
-  
-  const { execute, value } = useAsync(fetchSongs, false);
+  const { execute, value, status } = useAsync(fetchSongs, false);
   
   useEffect(() => {
     if (searchText) {
@@ -42,9 +42,11 @@ const MusicSearcher = () => {
       <h1>iTunes Music Searcher</h1>
       <Route
         exact
-        path={`/music-searcher/search`}
+        path={`/music-searcher`}
         render={() => (
           <Search
+            exact
+            loading={status === 'pending'}
             searchText={searchText}
             searchResults={searchResults}
             onChange={(value) => setSearchText(value)}
@@ -59,7 +61,5 @@ const MusicSearcher = () => {
     </Container>
   );
 };
-
-MusicSearcher.propTypes = {};
 
 export default MusicSearcher;

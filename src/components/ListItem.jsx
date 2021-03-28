@@ -6,62 +6,48 @@ import { FaPlay } from "react-icons/fa";
 
 const Container = styled.div`
   padding: 1rem;
-  display: flex;
-  height: 5rem;
+  display: grid;
+  grid-template-columns: 8vw 80% 1fr;
+  align-items: center;
   border: 1px solid #ddd;
   border-radius: 5px;
-  width: 60%;
   margin-bottom: 1rem;
-`;
-
-const ImageContainer = styled.div`
-  width: 20%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 100%;
 `;
 
 const Image = styled.img`
-  width: 100%;
-  height: 100%;
+  width: 10vw;
+  height: 10vw;
 `;
 
 const InfoContainer = styled.div`
-  width: 60%;
-  padding: 1rem;
+  padding: 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 `;
 
 const Title = styled.h3`
   margin: 0;
 `;
 
-const PlayContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 20%;
-`;
-
 const ListItem = ({ song }) => {
   return (
     <Container>
-      <ImageContainer>
-        <Image src={song.artworkUrl100} />
-      </ImageContainer>
+      <Image src={song.artworkUrl100} />
+
       <InfoContainer>
         <Title>{song.artistName}</Title>
         <Title>{song.trackName}</Title>
       </InfoContainer>
-      <PlayContainer>
-        <Link
-          to={{
-            pathname: `/music-searcher/song/${song.trackId}`,
-            song,
-          }}
-        >
-          <FaPlay />
-        </Link>
-      </PlayContainer>
+      <Link
+        to={{
+          pathname: `/music-searcher/song/${song.trackId}`,
+          song,
+        }}
+      >
+        <FaPlay />
+      </Link>
     </Container>
   );
 };

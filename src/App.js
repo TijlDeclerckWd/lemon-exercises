@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { Grid, Home, MusicSearcher, Song } from './views';
+import { Grid, Home, MusicSearcher } from "./views";
 import browserHistory from "./services/browserHistory";
 
 function App() {
