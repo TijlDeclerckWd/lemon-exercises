@@ -16,7 +16,7 @@ const ColorPickerContainer = styled.div`
     z-index: 5;
     background-color: #fff;
     border: 1px solid #ddd;
-    padding: 0 0,5rem;
+    padding: 0 0.5rem;
 `
 
 const Color = styled.div`
@@ -38,7 +38,9 @@ const ColorPicker = ({ x, y, selectMainColor}) => {
 }
 
 ColorPicker.propTypes = {
-
+    x: PropTypes.number,
+    y: PropTypes.number,
+    selectMainColor: PropTypes.func
 }
 
 export default ColorPicker

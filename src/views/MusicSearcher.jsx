@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { Route } from "react-router-dom";
 
@@ -12,6 +12,7 @@ const Container = styled.div`
 const MusicSearcher = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [searchText, setSearchText] = useState('');
+  const debouncedAction = useRef();
 
   const fetchSongs = () => {
     const url = new URL("https://itunes.apple.com/search");
@@ -27,7 +28,13 @@ const MusicSearcher = () => {
   
   useEffect(() => {
     if (searchText) {
-      execute();
+      if (debouncedAction !== undefined) {
+        clearTimeout(debouncedAction.current);
+      }
+
+      debouncedAction.current = setTimeout(() => {
+        execute();
+      },300);
     }
   }, [searchText]);
 
