@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import isTouchDevice from "utils/isTouchDevice";
 
 
 const SquareContainer = styled.div`
@@ -20,8 +21,8 @@ const Square = ({ mainColor, dragging }) => {
   return (
     <SquareContainer
       onDragStart={(e) => e.preventDefault}
-      onMouseEnter={() => dragging && setState({ active: true, color: mainColor })}
-      onMouseDown={(e) => e.button === 0 && setState({ active: !state.active, color: mainColor })}
+      onPointerDown={(e) => (e.button === 0 || isTouchDevice) && setState({ active: !state.active, color: mainColor })}
+      onPointerEnter={() => dragging && setState({ active: true, color: mainColor })}
       active={state.active}
       color={state.color}
     />

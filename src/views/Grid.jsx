@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import { Square, ColorPicker } from "components";
 import useEventListener from 'services/hooks/useEventListener';
+import isTouchDevice from 'utils/isTouchDevice';
 
 const Container = styled.div`
   box-sizing: border-box;
@@ -31,7 +32,7 @@ const Grid = () => {
 
   const handleDragging = useCallback((e, dragging) => {
     // if we pressed the left mouse button
-    if (e.button === 0) {
+    if (e.button === 0 || isTouchDevice) {
       setDragging(dragging);
     }
   }, []);
@@ -73,8 +74,8 @@ const Grid = () => {
   useEventListener('resize', calculateTotalSquares);
   // whenever we press down and move the mouse, a mouseenter event in one of the squares will lead
   // to that square being filled with the current selected color
-  useEventListener('mousedown', (e) => handleDragging(e, true));
-  useEventListener('mouseup', (e) => handleDragging(e, false));
+  useEventListener('pointerdown', (e) => handleDragging(e, true));
+  useEventListener('pointerup', (e) => handleDragging(e, false));
 
   // whenever we right click we display the colorpicker and we disable the default display of the contextmenu
   useEventListener('contextmenu', (e) => {
