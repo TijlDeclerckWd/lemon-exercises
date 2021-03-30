@@ -27,14 +27,17 @@ const MusicSearcher = () => {
   const { execute, value, status } = useAsync(fetchSongs, false);
   
   useEffect(() => {
-    if (searchText) {
-      if (debouncedAction !== undefined) {
-        clearTimeout(debouncedAction.current);
-      }
+    if (debouncedAction !== undefined) {
+      clearTimeout(debouncedAction.current);
+    }
 
+    if (searchText) {
       debouncedAction.current = setTimeout(() => {
         execute();
       },300);
+    } else {
+      // set searchResults back to empty array when user deletes all input
+      setSearchResults([]);
     }
   }, [searchText]);
 
